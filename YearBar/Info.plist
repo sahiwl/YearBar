@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+		LSUIElement = true tells macOS:
+		"This app is an agent — don't show it in the Dock,
+		 don't give it a menu bar (File/Edit/etc), and don't
+		 show it in the Cmd+Tab app switcher."
+		
+		This is THE key setting that makes a menu-bar-only app.
+	-->
+	<key>LSUIElement</key>
+	<true/>
+</dict>
+</plist>

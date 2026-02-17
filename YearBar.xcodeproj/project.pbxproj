@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		EAEE7B402F44AE7E004FA3A2 /* yearbar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yearbar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAEE7B402F44AE7E004FA3A2 /* YearBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YearBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		EAEE7B422F44AE7E004FA3A2 /* yearbar */ = {
+		EAEE7B422F44AE7E004FA3A2 /* YearBar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = yearbar;
+			path = YearBar;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +32,7 @@
 		EAEE7B372F44AE7E004FA3A2 = {
 			isa = PBXGroup;
 			children = (
-				EAEE7B422F44AE7E004FA3A2 /* yearbar */,
+				EAEE7B422F44AE7E004FA3A2 /* YearBar */,
 				EAEE7B412F44AE7E004FA3A2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,7 +40,7 @@
 		EAEE7B412F44AE7E004FA3A2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EAEE7B402F44AE7E004FA3A2 /* yearbar.app */,
+				EAEE7B402F44AE7E004FA3A2 /* YearBar.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EAEE7B3F2F44AE7E004FA3A2 /* yearbar */ = {
+		EAEE7B3F2F44AE7E004FA3A2 /* YearBar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EAEE7B4B2F44AE80004FA3A2 /* Build configuration list for PBXNativeTarget "yearbar" */;
+			buildConfigurationList = EAEE7B4B2F44AE80004FA3A2 /* Build configuration list for PBXNativeTarget "YearBar" */;
 			buildPhases = (
 				EAEE7B3C2F44AE7E004FA3A2 /* Sources */,
 				EAEE7B3D2F44AE7E004FA3A2 /* Frameworks */,
@@ -61,13 +61,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				EAEE7B422F44AE7E004FA3A2 /* yearbar */,
+				EAEE7B422F44AE7E004FA3A2 /* YearBar */,
 			);
-			name = yearbar;
+			name = YearBar;
 			packageProductDependencies = (
 			);
-			productName = yearbar;
-			productReference = EAEE7B402F44AE7E004FA3A2 /* yearbar.app */;
+			productName = YearBar;
+			productReference = EAEE7B402F44AE7E004FA3A2 /* YearBar.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EAEE7B3B2F44AE7E004FA3A2 /* Build configuration list for PBXProject "yearbar" */;
+			buildConfigurationList = EAEE7B3B2F44AE7E004FA3A2 /* Build configuration list for PBXProject "YearBar" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EAEE7B3F2F44AE7E004FA3A2 /* yearbar */,
+				EAEE7B3F2F44AE7E004FA3A2 /* YearBar */,
 			);
 		};
 /* End PBXProject section */
@@ -306,7 +306,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EAEE7B3B2F44AE7E004FA3A2 /* Build configuration list for PBXProject "yearbar" */ = {
+		EAEE7B3B2F44AE7E004FA3A2 /* Build configuration list for PBXProject "YearBar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EAEE7B492F44AE80004FA3A2 /* Debug */,
@@ -315,7 +315,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EAEE7B4B2F44AE80004FA3A2 /* Build configuration list for PBXNativeTarget "yearbar" */ = {
+		EAEE7B4B2F44AE80004FA3A2 /* Build configuration list for PBXNativeTarget "YearBar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EAEE7B4C2F44AE80004FA3A2 /* Debug */,
