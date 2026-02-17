@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+internal import Combine
 
 // @main tells Swift "this is the entry point of the app."
 // The App protocol is SwiftUI's way of defining an application.
