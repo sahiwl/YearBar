@@ -62,8 +62,8 @@ enum MenuBarIconRenderer {
         let image = NSImage(size: NSSize(width: size, height: size))
         image.lockFocus()
 
-        let rect = NSRect(x: 1.5, y: 1.5, width: size - 3, height: size - 3)
-        let lineWidth: CGFloat = 1.8
+        let rect = NSRect(x: 1, y: 1, width: size - 2, height: size - 2)
+        let lineWidth: CGFloat = 2.5
 
         // Draw the background track (faint ring)
         let trackPath = NSBezierPath(ovalIn: rect)
@@ -76,7 +76,7 @@ enum MenuBarIconRenderer {
         // We want to start at top (90° in AppKit's coordinate system)
         // and sweep clockwise (negative direction in AppKit).
         let center = NSPoint(x: size / 2, y: size / 2)
-        let radius = (size - 3) / 2
+        let radius = (size - 2) / 2
         let startAngle: CGFloat = 90
         let endAngle: CGFloat = 90 - (progress / 100) * 360
 
