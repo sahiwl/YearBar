@@ -40,8 +40,25 @@ struct MenuBarView: View {
                 )
             }
 
-            // A thin horizontal line to separate content from the button.
             Divider()
+
+            // --- Remaining / Spent days ---
+            // "let" inside a ViewBuilder is fine — SwiftUI allows local
+            // variable declarations between views.
+            let days = TimeCalculator.yearDayCounts()
+
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Remaining: \(days.remaining) days")
+                    Text("Spent: \(days.spent) days")
+                }
+                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .foregroundStyle(.secondary)
+
+                Spacer()
+            }
+
+//            Divider()
 
             // --- Quit button ---
             Button("Quit") {

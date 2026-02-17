@@ -18,6 +18,15 @@ struct CircularProgressView: View {
     let label: String          // e.g. "Year"
     let color: Color           // ring color
 
+    // How many decimal places to show. Default is 2 for the dropdown.
+    // "var ... = value" gives a default — callers can override it or leave it.
+    var decimalPlaces: Int = 2
+
+    // A "computed property" — it doesn't store a value, it calculates one
+    // on the fly each time you access it. Here we build the format string
+    // like "%.1f" or "%.2f" depending on decimalPlaces.
+    private var formatString: String { "%.\(decimalPlaces)f" }
+
     // "body" is the ONE required property of any View.
     // It describes what this view looks like.
     var body: some View {
@@ -48,7 +57,7 @@ struct CircularProgressView: View {
                     .rotationEffect(.degrees(-90))
 
                 // Percentage text in the center
-                Text("\(String(format: "%.1f", progress))%")
+                Text("\(String(format: formatString, progress))%")
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundStyle(color)
             }

@@ -71,4 +71,27 @@ struct TimeCalculator {
 
         return (elapsed / total) * 100
     }
+
+    // MARK: - Year Day Counts
+    // Returns a tuple: (daysSpent, daysRemaining) for the current year.
+    //
+    // "-> (spent: Int, remaining: Int)" is a named tuple — a lightweight way
+    // to return multiple values without creating a whole struct.
+    // You access results like: let info = yearDayCounts(); info.spent; info.remaining
+
+    static func yearDayCounts() -> (spent: Int, remaining: Int) {
+        let calendar = Calendar.current
+        let now = Date()
+
+        guard let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: now)),
+              let endOfYear = calendar.date(byAdding: .year, value: 1, to: startOfYear)
+        else { return (0, 0) }
+
+        // .day component between two dates gives whole days elapsed.
+        let spent = calendar.dateComponents([.day], from: startOfYear, to: now).day ?? 0
+        let totalDays = calendar.dateComponents([.day], from: startOfYear, to: endOfYear).day ?? 365
+        let remaining = totalDays - spent
+
+        return (spent, remaining)
+    }
 }
