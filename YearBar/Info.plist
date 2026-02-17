@@ -10,6 +10,8 @@
 		
 		This is THE key setting that makes a menu-bar-only app.
 	-->
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
 	<key>LSUIElement</key>
 	<true/>
 </dict>
