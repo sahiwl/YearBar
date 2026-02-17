@@ -1,6 +1,6 @@
 xcuserdata/
 *.xcuserstate
-
+RELEASE.md
 .DS_Store
 DerivedData/
 build/
