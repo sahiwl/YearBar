@@ -1,51 +1,55 @@
-//
-//  MenuBarView.swift
-//  YearBar
-//
-//  Created by Sahil Kumar Ray on 17/02/26.
-//
-
 import SwiftUI
 
-// This is the dropdown that appears when you click the menu bar item.
-
 struct MenuBarView: View {
+
+    @Binding var selectedMode: TimeMode
+    let yearProgress: Double
+    let monthProgress: Double
+    let weekProgress: Double
+
+    private var activeDays: (spent: Int, remaining: Int) {
+        TimeCalculator.dayCounts(for: selectedMode)
+    }
 
     var body: some View {
 
         VStack(spacing: 16) {
 
-            // --- Header ---
-            Text("Time Left")
-                .font(.system(size: 14, weight: .semibold))
+            Text("Time Passed")
                 .foregroundStyle(.primary)
 
-            // --- Three circular progress bars side-by-side ---
-            // HStack = horizontal stack (left to right).
             HStack(spacing: 20) {
                 CircularProgressView(
-                    progress: TimeCalculator.yearProgress(),
+                    progress: yearProgress,
                     label: "Year",
-                    color: .blue
+                    color: .blue,
+                    isSelected: selectedMode == .year
                 )
+                .contentShape(Rectangle())
+                .onTapGesture { selectedMode = .year }
+
                 CircularProgressView(
-                    progress: TimeCalculator.monthProgress(),
+                    progress: monthProgress,
                     label: "Month",
-                    color: .orange
+                    color: .orange,
+                    isSelected: selectedMode == .month
                 )
+                .contentShape(Rectangle())
+                .onTapGesture { selectedMode = .month }
+
                 CircularProgressView(
-                    progress: TimeCalculator.weekProgress(),
+                    progress: weekProgress,
                     label: "Week",
-                    color: .green
+                    color: .green,
+                    isSelected: selectedMode == .week
                 )
+                .contentShape(Rectangle())
+                .onTapGesture { selectedMode = .week }
             }
 
-            Divider()
+            // Divider()
 
-            // --- Remaining / Spent days ---
-            // "let" inside a ViewBuilder is fine — SwiftUI allows local
-            // variable declarations between views.
-            let days = TimeCalculator.yearDayCounts()
+            let days = activeDays
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -58,9 +62,16 @@ struct MenuBarView: View {
                 Spacer()
             }
 
-//            Divider()
+            Divider()
 
-            // --- Quit button ---
+            HStack(spacing: 4) {
+                Text("Built by")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.tertiary)
+                Link("Sahil", destination: URL(string: "https://github.com/sahiwl")!)
+                    .font(.system(size: 12, weight: .medium))
+            }
+
             Button("Quit") {
                 // NSApplication.shared is the running macOS app instance.
                 // .terminate(nil) shuts it down.

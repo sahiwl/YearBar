@@ -9,19 +9,22 @@ import SwiftUI
 import AppKit
 internal import Combine
 
-// @main tells Swift "this is the entry point of the app."
-// The App protocol is SwiftUI's way of defining an application.
 @main
 struct YearBarApp: App {
-
     // @State is SwiftUI's way of saying "this variable can change,
     // and when it does, redraw anything that uses it."
     // Here we store the year progress percentage so the menu bar text updates live.
     @State private var yearProgress: Double = TimeCalculator.yearProgress()
+    @State private var selectedMode: TimeMode = .year
+    @State private var lastUpdate = Date()
 
     // A Timer that fires every 60 seconds to refresh the percentage.
     // We store it so it stays alive for the app's lifetime.
     let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+
+    private var activeProgress: Double {
+        TimeCalculator.progress(for: selectedMode, at: lastUpdate)
+    }
 
     var body: some Scene {
         // MenuBarExtra is the magic API (macOS 13+) that puts your app
@@ -30,19 +33,22 @@ struct YearBarApp: App {
         // The "content:" closure is the DROPDOWN when clicked.
         // The "label:" closure is what shows IN the menu bar itself.
         MenuBarExtra {
-            MenuBarView()
-                // .onReceive listens to a Publisher (here, our timer).
-                // Every time the timer fires, we recalculate the year progress.
-                .onReceive(timer) { _ in
-                    yearProgress = TimeCalculator.yearProgress()
-                }
+            MenuBarView(
+                selectedMode: $selectedMode,
+                yearProgress: TimeCalculator.yearProgress(at: lastUpdate),
+                monthProgress: TimeCalculator.monthProgress(at: lastUpdate),
+                weekProgress: TimeCalculator.weekProgress(at: lastUpdate)
+            )
+            .onReceive(timer) { _ in
+                lastUpdate = Date()
+            }
         } label: {
             // The menu bar label: a small ring icon + percentage text.
             // We render the ring as an NSImage because the menu bar
             // only reliably displays Image and Text, not arbitrary shapes.
             HStack(spacing: 3) {
-                Image(nsImage: MenuBarIconRenderer.render(progress: yearProgress))
-                Text("\(String(format: "%.1f", yearProgress))%")
+                Image(nsImage: MenuBarIconRenderer.render(progress: activeProgress))
+                Text("\(String(format: "%.1f", activeProgress))%")
             }
         }
         // .menuBarExtraStyle(.window) gives us a nice popover-style dropdown
