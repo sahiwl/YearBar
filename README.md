@@ -26,6 +26,18 @@ Displays a live progress percentage with a circular ring icon in the menu bar. C
 
 Requires macOS 13+.
 
+
+**<h2>Updating:</h2>** If you already have YearBar and drag a new version into Applications, macOS will ask to replace the existing app. Click **Replace** to update. 
+
+Do not click **Keep Both** as it will create 2 copies of YearBar creating confusion. 
+![Update screenshot](./YearBar/Assets.xcassets/update.png)
+
+## preview
+here's what it looks like:
+![YearBar screenshot](./YearBar/Assets.xcassets/app.png)
+
+
+
 ## build from source
 
 ```bash

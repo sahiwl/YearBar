@@ -4,4 +4,5 @@ RELEASE.md
 .DS_Store
 DerivedData/
 build/
-*.zip 
+*.zip
+*.app
