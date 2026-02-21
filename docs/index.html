@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YearBar — Know where your time went</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: '#0a0a0f',
+            card: '#12121a',
+            border: '#1e1e2e',
+            accent: '#3b82f6',
+            glow: '#3b82f680',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0a0a0f; }
+    .grain {
+      position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .progress-track { background: #1e1e2e; }
+    .progress-fill { transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fade-up 0.8s ease-out both; }
+    .fade-up-d1 { animation-delay: 0.1s; }
+    .fade-up-d2 { animation-delay: 0.25s; }
+    .fade-up-d3 { animation-delay: 0.4s; }
+    .fade-up-d4 { animation-delay: 0.55s; }
+    .fade-up-d5 { animation-delay: 0.7s; }
+    .ring { animation: ring-draw 2s ease-out 0.6s both; }
+    @keyframes ring-draw {
+      from { stroke-dashoffset: 251; }
+    }
+    .screenshot-glow {
+      filter: drop-shadow(0 0 60px rgba(59, 130, 246, 0.15));
+    }
+    a.link-underline {
+      text-decoration: none;
+      background-image: linear-gradient(#3b82f6, #3b82f6);
+      background-size: 0% 1px;
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      transition: background-size 0.3s ease;
+    }
+    a.link-underline:hover { background-size: 100% 1px; }
+  </style>
+</head>
+<body class="text-white antialiased selection:bg-accent/30 overflow-x-hidden">
+  <div class="grain"></div>
+
+  <!-- nav -->
+  <nav class="fixed top-0 w-full z-40 backdrop-blur-md bg-surface/70 border-b border-border/50">
+    <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+      <span class="font-mono font-bold text-sm tracking-wider">YEARBAR</span>
+      <div class="flex items-center gap-6">
+        <a href="https://github.com/sahiwl/YearBar" target="_blank" class="text-zinc-400 hover:text-white transition text-sm">Source</a>
+        <a href="https://github.com/sahiwl/YearBar/releases/latest/download/YearBar.dmg"
+           class="bg-white text-black text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-zinc-200 transition">
+          Download
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <section class="min-h-screen flex items-center pt-14">
+    <div class="max-w-6xl mx-auto px-6 w-full">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+        <!-- left -->
+        <div class="space-y-8">
+          <!-- live stat -->
+          <div class="fade-up">
+            <div class="inline-flex items-center gap-3 bg-card border border-border rounded-full px-4 py-2">
+              <div class="relative w-8 h-8">
+                <svg class="w-8 h-8 -rotate-90" viewBox="0 0 88 88">
+                  <circle cx="44" cy="44" r="40" fill="none" stroke="#1e1e2e" stroke-width="5"/>
+                  <circle cx="44" cy="44" r="40" fill="none" stroke="#3b82f6" stroke-width="5"
+                    stroke-dasharray="251" class="ring"
+                    stroke-linecap="round" id="hero-ring"/>
+                </svg>
+              </div>
+              <span class="font-mono text-sm text-zinc-400">
+                <span id="hero-pct" class="text-white font-semibold">0.0</span>% of <span id="hero-year">2026</span> is over
+              </span>
+            </div>
+          </div>
+
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.95] tracking-tight fade-up fade-up-d1">
+            Know where<br>your time<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">went.</span>
+          </h1>
+
+          <p class="text-lg text-zinc-400 max-w-md leading-relaxed fade-up fade-up-d2">
+            A tiny macOS menu bar app that shows how much of the year, month, and week has passed. No window. No dock icon. Just a quiet reminder.
+          </p>
+
+          <!-- progress bars -->
+          <div class="space-y-3 max-w-md fade-up fade-up-d3">
+            <div class="flex items-center justify-between text-xs font-mono text-zinc-500">
+              <span>YEAR</span><span id="year-pct">0%</span>
+            </div>
+            <div class="progress-track h-1.5 rounded-full overflow-hidden">
+              <div id="year-bar" class="progress-fill h-full bg-blue-500 rounded-full" style="width:0%"></div>
+            </div>
+            <div class="flex items-center justify-between text-xs font-mono text-zinc-500 pt-1">
+              <span>MONTH</span><span id="month-pct">0%</span>
+            </div>
+            <div class="progress-track h-1.5 rounded-full overflow-hidden">
+              <div id="month-bar" class="progress-fill h-full bg-orange-500 rounded-full" style="width:0%"></div>
+            </div>
+            <div class="flex items-center justify-between text-xs font-mono text-zinc-500 pt-1">
+              <span>WEEK</span><span id="week-pct">0%</span>
+            </div>
+            <div class="progress-track h-1.5 rounded-full overflow-hidden">
+              <div id="week-bar" class="progress-fill h-full bg-green-500 rounded-full" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 fade-up fade-up-d4">
+            <a href="https://github.com/sahiwl/YearBar/releases/latest/download/YearBar.dmg"
+               class="inline-flex items-center gap-2 bg-white text-black font-semibold px-6 py-3 rounded-full hover:bg-zinc-200 transition text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"/></svg>
+              Download .dmg
+            </a>
+            <span class="text-xs text-zinc-600">macOS 13+</span>
+          </div>
+        </div>
+
+        <!-- right: screenshot area -->
+        <div class="relative fade-up fade-up-d5 flex justify-center lg:justify-end">
+          <div class="relative">
+            <!-- fake menubar context -->
+            <div class="bg-card border border-border rounded-2xl p-6 w-72 screenshot-glow">
+              <p class="text-center text-sm font-semibold mb-5 text-zinc-300">Time Passed</p>
+              <div class="flex justify-between px-2 mb-6">
+                <div class="text-center">
+                  <div class="relative w-16 h-16 mx-auto mb-1.5">
+                    <svg class="w-16 h-16 -rotate-90" viewBox="0 0 88 88">
+                      <circle cx="44" cy="44" r="38" fill="none" stroke="#1e3a5f" stroke-width="5"/>
+                      <circle cx="44" cy="44" r="38" fill="none" stroke="#3b82f6" stroke-width="5"
+                        stroke-dasharray="239" stroke-linecap="round" class="ring" id="mock-year-ring"/>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-blue-400 font-mono" id="mock-year-val">0%</span>
+                  </div>
+                  <span class="text-[10px] text-zinc-500 font-bold">Year</span>
+                  <div class="w-1 h-1 rounded-full bg-blue-500 mx-auto mt-1"></div>
+                </div>
+                <div class="text-center">
+                  <div class="relative w-16 h-16 mx-auto mb-1.5">
+                    <svg class="w-16 h-16 -rotate-90" viewBox="0 0 88 88">
+                      <circle cx="44" cy="44" r="38" fill="none" stroke="#3d2a0a" stroke-width="5"/>
+                      <circle cx="44" cy="44" r="38" fill="none" stroke="#f97316" stroke-width="5"
+                        stroke-dasharray="239" stroke-linecap="round" class="ring" id="mock-month-ring"/>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-orange-400 font-mono" id="mock-month-val">0%</span>
+                  </div>
+                  <span class="text-[10px] text-zinc-500">Month</span>
+                </div>
+                <div class="text-center">
+                  <div class="relative w-16 h-16 mx-auto mb-1.5">
+                    <svg class="w-16 h-16 -rotate-90" viewBox="0 0 88 88">
+                      <circle cx="44" cy="44" r="38" fill="none" stroke="#0a2e1a" stroke-width="5"/>
+                      <circle cx="44" cy="44" r="38" fill="none" stroke="#22c55e" stroke-width="5"
+                        stroke-dasharray="239" stroke-linecap="round" class="ring" id="mock-week-ring"/>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-green-400 font-mono" id="mock-week-val">0%</span>
+                  </div>
+                  <span class="text-[10px] text-zinc-500">Week</span>
+                </div>
+              </div>
+              <div class="border-t border-border pt-4 space-y-1.5">
+                <p class="text-xs text-zinc-500 font-medium font-mono">Remaining: <span id="mock-remaining">—</span> days</p>
+                <p class="text-xs text-zinc-500 font-medium font-mono">Spent: <span id="mock-spent">—</span> days</p>
+              </div>
+            </div>
+            <!-- floating menubar pill -->
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-zinc-800/90 border border-zinc-700 rounded-md px-3 py-1 flex items-center gap-1.5 backdrop-blur-sm">
+              <div class="relative w-3.5 h-3.5">
+                <svg class="w-3.5 h-3.5 -rotate-90" viewBox="0 0 88 88">
+                  <circle cx="44" cy="44" r="38" fill="none" stroke="#555" stroke-width="8"/>
+                  <circle cx="44" cy="44" r="38" fill="none" stroke="#fff" stroke-width="8"
+                    stroke-dasharray="239" stroke-linecap="round" class="ring" id="mock-bar-ring"/>
+                </svg>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-zinc-200" id="mock-bar-pct">0%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- features -->
+  <section class="py-32">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid sm:grid-cols-3 gap-6">
+        <div class="bg-card border border-border rounded-xl p-6 hover:border-zinc-700 transition">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3 class="font-semibold text-sm mb-1.5">Lives in the menu bar</h3>
+          <p class="text-xs text-zinc-500 leading-relaxed">No dock icon. No window. Just a percentage and a ring that's always there when you glance up.</p>
+        </div>
+        <div class="bg-card border border-border rounded-xl p-6 hover:border-zinc-700 transition">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center mb-4">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+          </div>
+          <h3 class="font-semibold text-sm mb-1.5">Year · Month · Week</h3>
+          <p class="text-xs text-zinc-500 leading-relaxed">Three progress rings. Tap one to switch the menu bar view. See remaining and spent days at a glance.</p>
+        </div>
+        <div class="bg-card border border-border rounded-xl p-6 hover:border-zinc-700 transition">
+          <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center mb-4">
+            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+          </div>
+          <h3 class="font-semibold text-sm mb-1.5">Launch at login</h3>
+          <p class="text-xs text-zinc-500 leading-relaxed">One toggle. YearBar starts with your Mac and stays out of the way. Updates check against GitHub releases.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- install -->
+  <section class="pb-32">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="bg-card border border-border rounded-2xl p-8 sm:p-12">
+        <h2 class="font-mono text-xs text-zinc-500 tracking-widest uppercase mb-6">Install</h2>
+        <div class="space-y-4 text-sm text-zinc-400 font-mono">
+          <div class="flex gap-4">
+            <span class="text-zinc-600 select-none">01</span>
+            <span>Download <a href="https://github.com/sahiwl/YearBar/releases/latest/download/YearBar.dmg" class="text-white link-underline">YearBar.dmg</a></span>
+          </div>
+          <div class="flex gap-4">
+            <span class="text-zinc-600 select-none">02</span>
+            <span>Open the .dmg → drag YearBar.app to /Applications</span>
+          </div>
+          <div class="flex gap-4">
+            <span class="text-zinc-600 select-none">03</span>
+            <span>First launch: right-click → Open → Open (unsigned app)</span>
+          </div>
+          <div class="flex gap-4">
+            <span class="text-zinc-600 select-none">04</span>
+            <span>When updating, click <span class="text-white">Replace</span> if macOS asks</span>
+          </div>
+        </div>
+        <p class="text-xs text-zinc-600 mt-6 font-mono">requires macOS 13 ventura or later</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer class="border-t border-border py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4 text-sm text-zinc-500">
+        <span class="font-mono font-bold text-xs tracking-wider text-zinc-400">YEARBAR</span>
+        <span class="text-zinc-700">·</span>
+        <span>Built by <a href="https://sahiwl.me" target="_blank" class="text-zinc-300 link-underline">Sahil</a></span>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="https://github.com/sahiwl" target="_blank" class="text-zinc-500 hover:text-white transition">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://github.com/sahiwl/YearBar" target="_blank" class="text-xs text-zinc-600 hover:text-zinc-400 transition font-mono">source ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function calcProgress() {
+      const now = new Date();
+      const y = now.getFullYear();
+
+      const startOfYear = new Date(y, 0, 1);
+      const endOfYear = new Date(y + 1, 0, 1);
+      const yearPct = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+
+      const dom = now.getDate();
+      const dim = new Date(y, now.getMonth() + 1, 0).getDate();
+      const monthPct = (dom / dim) * 100;
+
+      const dayOfWeek = (now.getDay() + 6) % 7;
+      const weekPct = ((dayOfWeek + 1) / 7) * 100;
+
+      const dayOfYear = Math.floor((now - startOfYear) / 86400000);
+      const totalDays = Math.floor((endOfYear - startOfYear) / 86400000);
+
+      return { yearPct, monthPct, weekPct, spent: dayOfYear, remaining: totalDays - dayOfYear, y };
+    }
+
+    function setDash(el, pct, circumference) {
+      el.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const d = calcProgress();
+
+      setTimeout(() => {
+        document.getElementById('year-bar').style.width = d.yearPct + '%';
+        document.getElementById('month-bar').style.width = d.monthPct + '%';
+        document.getElementById('week-bar').style.width = d.weekPct + '%';
+      }, 200);
+
+      document.getElementById('year-pct').textContent = d.yearPct.toFixed(1) + '%';
+      document.getElementById('month-pct').textContent = d.monthPct.toFixed(1) + '%';
+      document.getElementById('week-pct').textContent = d.weekPct.toFixed(1) + '%';
+      document.getElementById('hero-pct').textContent = d.yearPct.toFixed(1);
+      document.getElementById('hero-year').textContent = d.y;
+
+      const c239 = 239, c251 = 251;
+      setDash(document.getElementById('hero-ring'), d.yearPct, c251);
+      setDash(document.getElementById('mock-year-ring'), d.yearPct, c239);
+      setDash(document.getElementById('mock-month-ring'), d.monthPct, c239);
+      setDash(document.getElementById('mock-week-ring'), d.weekPct, c239);
+      setDash(document.getElementById('mock-bar-ring'), d.yearPct, c239);
+
+      document.getElementById('mock-year-val').textContent = d.yearPct.toFixed(1) + '%';
+      document.getElementById('mock-month-val').textContent = d.monthPct.toFixed(1) + '%';
+      document.getElementById('mock-week-val').textContent = d.weekPct.toFixed(1) + '%';
+      document.getElementById('mock-bar-pct').textContent = d.yearPct.toFixed(1) + '%';
+      document.getElementById('mock-remaining').textContent = d.remaining;
+      document.getElementById('mock-spent').textContent = d.spent;
+    });
+  </script>
+</body>
+</html>
