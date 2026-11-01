@@ -1,0 +1,13 @@
+// Paste into waybar config under "modules-center" / "modules-right":
+//   "custom/yearbar"
+//
+// And add:
+{
+  "custom/yearbar": {
+    "exec": "node --experimental-strip-types /home/sahilkr/Repos/YearBar/linux/waybar/yearbar.mjs",
+    "return-type": "json",
+    "interval": 60,
+    "format": "󰄬 {}",
+    "tooltip": true
+  }
+}

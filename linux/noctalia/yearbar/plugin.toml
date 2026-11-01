@@ -1,0 +1,34 @@
+# YearBar for Noctalia — year/month/week progress in the bar (sysmon-style)
+# capsule + Mac-like circular rings in the click panel.
+#
+# Enable:  noctalia msg plugins enable sahiwl/yearbar
+# Add widget: Settings → Bar → add "sahiwl/yearbar:bar"
+# Panel: click the widget (or: noctalia msg panel-toggle sahiwl/yearbar:panel)
+
+id = "sahiwl/yearbar"
+name = "YearBar"
+version = "0.1.0"
+plugin_api = 43
+author = "sahiwl"
+license = "MIT"
+dependencies = []
+tags = ["time", "progress", "utility"]
+icon = "chart-donut"
+description = "Shows how much of the year, month, and week has passed — bar capsule + circular progress panel."
+
+[[service]]
+id = "ticker"
+entry = "service.luau"
+
+[[widget]]
+id = "bar"
+entry = "widget.luau"
+
+[[panel]]
+id = "panel"
+entry = "panel.luau"
+width = 320
+height = 260
+placement = "attached"
+position = "auto"
+open_near_click = true

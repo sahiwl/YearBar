@@ -6,14 +6,11 @@ DerivedData/
 build/
 *.zip
 *.app
-
-
+*.dmg
 
 node_modules/
-package.json
-package-lock.json
-pnpm-lock.yaml
-pnpm-workspace.yaml
 dist/
 antigravity/
-*.dmg
+
+# Electron scaffold leftovers (keep package manifests for core/)
+windows/**/package-lock.json
