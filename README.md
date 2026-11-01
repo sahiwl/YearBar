@@ -12,6 +12,8 @@ A macOS menu bar app that shows how much of the year has passed.
 
 Displays a live progress percentage with a circular ring icon in the menu bar. Click it to see year, month, and week progress at a glance.
 
+**Linux (Noctalia / niri):** see [`linux/noctalia/yearbar/README.md`](./linux/noctalia/yearbar/README.md) — bar capsule + Mac-style rings panel. Shared math lives in [`core/`](./core/).
+
 ## what it can do
 
 - Year progress percentage in the menu bar, updates every 60 seconds

@@ -1,0 +1,12 @@
+{
+  "name": "@yearbar/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/time.ts"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test src/time.test.ts"
+  }
+}
