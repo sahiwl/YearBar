@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YearBar</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <div class="panel" id="panel">
+      <h1 class="title">Time Passed</h1>
+
+      <div class="rings" id="rings"></div>
+
+      <div class="days" id="days">
+        <div>Remaining: — days</div>
+        <div>Spent: — days</div>
+      </div>
+
+      <hr class="divider" />
+
+      <button type="button" class="btn" id="btn-updates">
+        <span>Check for updates</span>
+        <span class="spinner" id="updates-spinner" hidden></span>
+      </button>
+
+      <button type="button" class="btn" id="btn-autostart">
+        Launch at login: Off
+      </button>
+
+      <hr class="divider" />
+
+      <p class="credit">
+        Built by
+        <a href="https://github.com/sahiwl" id="link-sahil" target="_blank" rel="noreferrer"
+          >Sahil</a
+        >
+      </p>
+
+      <button type="button" class="btn btn-quit" id="btn-quit">Quit</button>
+    </div>
+
+    <div class="alert" id="alert" hidden>
+      <div class="alert-card">
+        <h2 id="alert-title"></h2>
+        <p id="alert-message"></p>
+        <div class="alert-actions" id="alert-actions"></div>
+      </div>
+    </div>
+  </body>
+</html>

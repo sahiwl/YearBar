@@ -1,0 +1,235 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f5f5f7;
+  --fg: #1d1d1f;
+  --secondary: #6e6e73;
+  --tertiary: #8e8e93;
+  --divider: rgba(60, 60, 67, 0.18);
+  --btn-bg: rgba(120, 120, 128, 0.12);
+  --btn-border: rgba(60, 60, 67, 0.18);
+  --btn-hover: rgba(120, 120, 128, 0.2);
+  --link: #0a84ff;
+  --alert-bg: rgba(0, 0, 0, 0.35);
+  --card: #ffffff;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #2c2c2e;
+    --fg: #f5f5f7;
+    --secondary: #98989d;
+    --tertiary: #6e6e73;
+    --divider: rgba(84, 84, 88, 0.55);
+    --btn-bg: rgba(120, 120, 128, 0.24);
+    --btn-border: rgba(84, 84, 88, 0.55);
+    --btn-hover: rgba(120, 120, 128, 0.36);
+    --card: #3a3a3c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* .alert/.spinner set display, which would otherwise beat the hidden attribute */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  width: 100%;
+  min-height: 480px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.rings {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.ring-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+  width: 72px;
+}
+
+.ring-svg {
+  width: 72px;
+  height: 72px;
+  display: block;
+}
+
+.ring-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--secondary);
+  font-variation-settings: "wght" 500;
+}
+
+.ring-item.selected .ring-label {
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.ring-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.ring-item.selected .ring-dot {
+  opacity: 1;
+}
+
+.days {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--secondary);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--divider);
+  width: 100%;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--btn-hover);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-quit {
+  margin-top: 4px;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--secondary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.credit {
+  font-size: 12px;
+  color: var(--tertiary);
+  text-align: center;
+}
+
+.credit a {
+  color: var(--link);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.credit a:hover {
+  text-decoration: underline;
+}
+
+.alert {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--alert-bg);
+  padding: 16px;
+  z-index: 10;
+}
+
+.alert-card {
+  width: 100%;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+}
+
+.alert-card h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.alert-card p {
+  font-size: 13px;
+  color: var(--secondary);
+}
+
+.alert-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.alert-actions .btn {
+  width: auto;
+  min-width: 72px;
+}
