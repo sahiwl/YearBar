@@ -1,3 +1,4 @@
+import { getVersion } from "@tauri-apps/api/app";
 import { invoke } from "@tauri-apps/api/core";
 import { disable as disableAutostart, enable as enableAutostart, isEnabled as isAutostartEnabled } from "@tauri-apps/plugin-autostart";
 import { openUrl } from "@tauri-apps/plugin-opener";
@@ -22,7 +23,6 @@ const LABELS: Record<TimeMode, string> = {
   week: "Week",
 };
 
-const APP_VERSION = "0.1.0";
 const REPO = "sahiwl/YearBar";
 
 type Snapshot = {
@@ -182,7 +182,7 @@ async function checkUpdates() {
     const latest = tag.startsWith("v") ? tag.slice(1) : tag;
     const url = json.html_url;
 
-    if (latest && url && isNewer(latest, APP_VERSION)) {
+    if (latest && url && isNewer(latest, await getVersion())) {
       showAlert("Update available", `Version ${latest} is available.`, [
         { label: "Cancel" },
         {

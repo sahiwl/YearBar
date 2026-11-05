@@ -12,5 +12,5 @@ node_modules/
 dist/
 antigravity/
 
-# Electron scaffold leftovers (keep package manifests for core/)
-windows/**/package-lock.json
+# Tauri / Rust
+windows/src-tauri/target/

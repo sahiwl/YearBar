@@ -1,0 +1,52 @@
+name: Windows release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The app reports this version to its update check, so a mismatch would show a false "update available".
+      - name: Check tag matches windows/src-tauri/Cargo.toml version
+        if: github.event_name == 'release'
+        shell: bash
+        run: |
+          v=$(grep -m1 '^version' windows/src-tauri/Cargo.toml | cut -d'"' -f2)
+          tag="${{ github.event.release.tag_name }}"
+          if [ "v$v" != "$tag" ]; then
+            echo "Cargo.toml version is v$v but the release tag is $tag. Bump Cargo.toml first."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: windows/src-tauri -> target
+
+      - run: npm ci
+        working-directory: windows
+
+      # Without a release (manual run) this only builds and keeps the installers as workflow artifacts.
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: windows
+          releaseId: ${{ github.event.release.id }}
+          uploadUpdaterJson: false
+          uploadWorkflowArtifacts: true

@@ -1,6 +1,6 @@
 [package]
 name = "yearbar"
-version = "0.1.0"
+version = "1.2.0"
 description = "YearBar — year progress in the Windows tray"
 authors = ["Sahil"]
 edition = "2021"
